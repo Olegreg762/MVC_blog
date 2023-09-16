@@ -1,2 +1,5 @@
 .DS_Store
 test.html
+.env
+node_modules/
+package-lock.json
