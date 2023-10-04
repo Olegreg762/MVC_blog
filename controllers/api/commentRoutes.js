@@ -22,7 +22,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req,res) => {
+router.put("/:id", withAuth, async (req,res) => {
     try{
         const commentData = await Comment.update(
             {
@@ -37,7 +37,19 @@ router.put("/:id", async (req,res) => {
     }
 });
 
-router.delete("/:id", async (req,res) => {
+router.post("/", withAuth, async (res, req) => {
+    try {
+        const commentData = await Comment.create({
+            ...req.body,
+            user_id: req.session.user_id
+        });
+        res.status(200).json(commentData);
+    } catch {
+        res.status(400).json(err)
+    }
+});
+
+router.delete("/:id", withAuth, async (req,res) => {
     try {
         const commentId = await Comment.destroy({
             where: {id: req.params.id}
